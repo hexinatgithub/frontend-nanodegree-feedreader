@@ -109,22 +109,26 @@ $(function () {
                 newEntryLinks = [];
 
             loadFeed(0, function () {
-                const entries = $('.feed').find('.entry-link');
+                const entries = $('.feed .entry-link');
                 for (let i = 0; i < entries.length; i++) {
                     const entry = entries[i];
                     oldEntryLinks.push(entry.href);
                 }
-
-                loadFeed(1, function () {
-                    const entries = $('.feed').find('.entry-link');
-                    for (let i = 0; i < entries.length; i++) {
-                        const entry = entries[i];
-                        newEntryLinks.push(entry.href);
-                    }
-                    done();
-                });
+                done();
             });
         });
+
+        beforeEach((done) => {
+            loadFeed(1, function () {
+                const entries = $('.feed .entry-link');
+                for (let i = 0; i < entries.length; i++) {
+                    const entry = entries[i];
+                    newEntryLinks.push(entry.href);
+                }
+                done();
+            });
+        });
+
 
         it('a new feed is loaded by the loadFeed function.', function (done) {
             for (let i = 0; i < oldEntryLinks.length; i++) {
