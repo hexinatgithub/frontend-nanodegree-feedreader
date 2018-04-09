@@ -32,10 +32,10 @@ $(function () {
          * and that the URL is not empty.
          */
         it('has URL defined and is not empty', function () {
-            for (const feed of allFeeds) {
+            allFeeds.forEach(feed => {
                 expect(feed.url).toBeDefined();
                 expect(feed.url.length).not.toBe(0);
-            }
+            });
         });
 
         /* Loops through each feed in the allFeeds object 
@@ -43,10 +43,10 @@ $(function () {
          * and that the name is not empty.
          */
         it('has name defined and is not empty', function () {
-            for (const feed of allFeeds) {
+            allFeeds.forEach(feed => {
                 expect(feed.name).toBeDefined();
                 expect(feed.name.length).not.toBe(0);
-            }
+            });
         });
     });
 
@@ -101,41 +101,23 @@ $(function () {
          * Remember, loadFeed() is asynchronous.
          */
 
-        let oldEntryLinks,
-            newEntryLinks;
+        let oldHtml,
+            newHtml;
 
         beforeEach(function (done) {
-            oldEntryLinks = [],
-                newEntryLinks = [];
-
             loadFeed(0, function () {
-                const entries = $('.feed .entry-link');
-                for (let i = 0; i < entries.length; i++) {
-                    const entry = entries[i];
-                    oldEntryLinks.push(entry.href);
-                }
-                done();
+                const entries = $('.feed')[0];
+                oldHtml = entries.innerText;
+                loadFeed(1, function () {
+                    const entries = $('.feed')[0];
+                    newHtml = entries.innerText;
+                    done();
+                });
             });
         });
-
-        beforeEach((done) => {
-            loadFeed(1, function () {
-                const entries = $('.feed .entry-link');
-                for (let i = 0; i < entries.length; i++) {
-                    const entry = entries[i];
-                    newEntryLinks.push(entry.href);
-                }
-                done();
-            });
-        });
-
 
         it('a new feed is loaded by the loadFeed function.', function (done) {
-            for (let i = 0; i < oldEntryLinks.length; i++) {
-                const oldLink = oldEntryLinks[i],
-                    newLink = newEntryLinks[i];
-                expect(oldLink).not.toEqual(newLink);
-            }
+            expect(oldHtml).not.toEqual(newHtml);
             done();
         });
     });
